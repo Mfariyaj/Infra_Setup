@@ -5,6 +5,8 @@ resource "aws_eks_cluster" "eks" {
   subnet_id     = var.subnet_id
   tags = merge(var.tags, { "Name" = var.aws_eks_cluster })
 
+}
+
 # # Using Data Source to get all Avalablility Zones in Region
 # data "aws_availability_zones" "available_zones" {}
 
