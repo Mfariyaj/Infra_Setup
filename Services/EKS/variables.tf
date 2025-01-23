@@ -7,8 +7,10 @@ variable "master_arn" {
   description = "arn of the master_eks_role"
   type        = string
 }
-
-
+variable "worker_arn" {
+  description = "arn of the worker_arn_role"
+  type        = string
+}
 variable "ami_id" {
   description = "AMI ID for the instance"
   type        = string
