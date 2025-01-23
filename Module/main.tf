@@ -25,7 +25,7 @@ module "ec2_instance" {
   instance_name      = var.instance_name
   ami_id             = var.ami_id
   instance_type      = var.instance_type
-  subnet_id          = module.vpc.public_subnet_ids
+  subnet_id          = element(module.vpc.public_subnet_ids, 0)
   security_group_ids = [module.security_group.security_group_id]
   key_name           = var.key_name
   tags               = var.tags
