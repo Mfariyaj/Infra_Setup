@@ -81,3 +81,9 @@ variable "ami_id" {
   type   = string  
   default = "vpc-0f47ef7a7f2c5dafd"
 }
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
