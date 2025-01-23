@@ -80,3 +80,4 @@ variable "ami_id" {
   description = "AMI ID for the EC2 instance"
   type   = string  
   default = "vpc-0f47ef7a7f2c5dafd"
+}
