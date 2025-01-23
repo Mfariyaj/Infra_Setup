@@ -44,6 +44,7 @@ variable "tags" {
 variable "project_name" {
   description = "name of the eks ec2-server"
   type        = string
+  default     = "eks-server"
 }
 
 
