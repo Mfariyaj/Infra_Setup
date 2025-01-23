@@ -35,10 +35,7 @@ resource "aws_instance" "kubectl-server" {
   associate_public_ip_address = true
   subnet_id     = var.subnet_id
   vpc_security_group_ids = var.security_group_ids
-
-  tags = {
-    Name = "${var.project_name}-kubectl"
-  }
+  tags = merge(var.tags, { "Name" = var.aws_instance })
 }
 
 # Creating Worker Node Group

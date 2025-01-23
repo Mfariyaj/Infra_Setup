@@ -45,7 +45,7 @@ module "EKS" {
   subnet_id          = element[module.vpc.public_subnet_ids]
   security_group_ids = [module.security_group.security_group_id]
   master_arn         = module.output.master_arn
-  worker_arn         = module.output.worker_arn
+  node_role_arn         = module.output.worker_arn
   node_group_name    = var.node_group_name
   key_name           = var.key_name
   tags               = var.tags
