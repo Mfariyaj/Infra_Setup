@@ -19,7 +19,7 @@ pipeline {
         stage('Git Pulling') {
             steps {
                 echo 'Pulling latest code from GitHub...'
-                git branch: 'master', url: 'https://github.com/Mfariyaj/Infra_Setup.git'
+                git branch: 'main', url: 'https://github.com/Mfariyaj/Infra_Setup.git'
             }
         }
         stage('Init') {
