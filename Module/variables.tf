@@ -76,10 +76,23 @@ variable "instance_name" {
   default     = "example-ec2"
 }
 
+variable "instance_type" {
+  description = "Name of the EC2 instance"
+  type        = string
+  default     = "t2.micro"
+}
+
+
 variable "ami_id" {
   description = "AMI ID for the EC2 instance"
   type   = string  
-  default = "vpc-0f47ef7a7f2c5dafd"
+  default = "ami-0df8c184d5f6ae949"
+}
+
+variable "key_name" {
+  description = "AMI ID for the EC2 instance"
+  type   = string  
+  default = "fariyaj-cloudthat"
 }
 
 variable "tags" {
