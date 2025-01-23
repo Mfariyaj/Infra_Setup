@@ -2,8 +2,16 @@ provider "aws" {
   region = var.region
 }
 
+module "vpc" {
+  source           = "../Services/VPC"
+  vpc_cidr         = var.vpc_cidr
+  public_subnets   = var.public_subnets
+  private_subnets  = var.private_subnets
+  region           = var.region
+  tags             = var.tags
+}
 module "security_group" {
-  source  = "./modules/security_group"
+  source  = "../Services/SG"
   sg_name = var.sg_name
   vpc_id  = var.vpc_id
 
@@ -13,7 +21,7 @@ module "security_group" {
 }
 
 module "ec2_instance" {
-  source             = "./modules/ec2"
+  source             = "../Services/EC2"
   instance_name      = var.instance_name
   ami_id             = var.ami_id
   instance_type      = var.instance_type
