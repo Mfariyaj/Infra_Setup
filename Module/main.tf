@@ -31,3 +31,23 @@ module "ec2_instance" {
   tags               = var.tags
 }
 
+module "IAM_EKS_Role" {
+
+  source = "../Services/iam-policy-eks"
+}
+
+module "EKS" {
+
+  source = "../Services/EKS" 
+  instance_name      = var.instance_name
+  ami_id             = var.ami_id
+  instance_type      = var.instance_type
+  subnet_id          = element(module.vpc.public_subnet_ids, 0)
+  security_group_ids = [module.security_group.security_group_id]
+  master_arn         = module.output.master_arn
+  worker_arn         = module.output.worker_arn
+  node_group_name    = var.node_group_name
+  key_name           = var.key_name
+  tags               = var.tags
+
+}

@@ -100,3 +100,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "node_group_name" {
+  description = "AMI ID for the EC2 instance"
+  type   = string  
+  default = "node_group_name"
+}
