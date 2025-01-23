@@ -22,14 +22,6 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/Mfariyaj/Infra_Setup.git'
             }
         }
-         stage('Validate') {
-            steps {
-                echo 'Validating Terraform configuration...'
-                withAWS(credentials: 'aws_creds', region: 'us-east-1') {
-                    sh "terraform -chdir=${TERRAFORM_DIR} validate"
-                }
-            }
-        }
         stage('Init') {
             steps {
                 echo 'Initializing Terraform with reconfiguration...'
@@ -38,7 +30,14 @@ pipeline {
                 }
             }
         }
-       
+                stage('Validate') {
+            steps {
+                echo 'Validating Terraform configuration...'
+                withAWS(credentials: 'aws_creds', region: 'us-east-1') {
+                    sh "terraform -chdir=${TERRAFORM_DIR} validate"
+                }
+            }
+        }
         stage('Action') {
             steps {
                 echo "Executing Terraform action: ${params.Terraform_Action}..."
