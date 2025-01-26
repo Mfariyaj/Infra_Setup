@@ -1,57 +1,23 @@
-# Creating EKS Cluster
-resource "aws_eks_cluster" "eks" {
-  name     = "AWS-EKS"
-  role_arn = var.master_arn
-  subnet_id     = var.subnet_id
-  tags = merge(var.tags, { "Name" = var.aws_eks_cluster })
+resource "aws_eks_cluster" "main" {
+  name     = var.cluster_name
+  role_arn = var.cluster_role_arn
 
+  vpc_config {
+    subnet_ids = var.private_subnet_ids
+  }
 }
 
-# # Using Data Source to get all Avalablility Zones in Region
-# data "aws_availability_zones" "available_zones" {}
-
-# # Fetching Ubuntu 20.04 AMI ID
-# data "aws_ami" "amazon_linux_2" {
-#   most_recent = true
-
-#   filter {
-#     name   = "name"
-#     values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
-#   }
-
-#   filter {
-#     name   = "virtualization-type"
-#     values = ["hvm"]
-#   }
-
-#   owners = ["099720109477"]
-# }
-
-resource "aws_eks_node_group" "node-grp" {
-  cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = var.node_group_name
-  node_role_arn   = var.worker_arn
-  subnet_id     = var.subnet_id
-  capacity_type   = "ON_DEMAND"
-  disk_size       = 20
-  instance_types  = [var.instance_type]
-
-  remote_access {
-    ec2_ssh_key               = var.key_name
-    vpc_security_group_ids = var.security_group_ids
-  }
-
-  labels = {
-    env = "Prod"
-  }
+resource "aws_eks_node_group" "worker_nodes" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "${var.cluster_name}-node-group"
+  node_role_arn   = var.node_role_arn
+  subnet_ids      = var.public_subnet_ids
 
   scaling_config {
-    desired_size = 2
-    max_size     = 2
+    desired_size = var.desired_capacity
+    max_size     = 5
     min_size     = 1
   }
 
-  update_config {
-    max_unavailable = 1
-  }
+  instance_types = [var.node_instance_type]
 }

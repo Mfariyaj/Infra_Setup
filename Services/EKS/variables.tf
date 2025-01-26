@@ -1,56 +1,34 @@
-variable "instance_name" {
-  description = "Name of the EC2 instance"
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
   type        = string
 }
 
-variable "master_arn" {
-  description = "arn of the master_eks_role"
-  type        = string
-}
-variable "worker_arn" {
-  description = "arn of the worker_arn_role"
-  type        = string
-}
-variable "ami_id" {
-  description = "AMI ID for the instance"
+variable "cluster_role_arn" {
+  description = "IAM role ARN for EKS cluster"
   type        = string
 }
 
-variable "instance_type" {
-  description = "Instance type"
-  type        = string
-  default     = "t2.micro"
-}
-
-variable "subnet_id" {
-  description = "Subnet ID where the instance will be deployed"
+variable "node_role_arn" {
+  description = "IAM role ARN for worker nodes"
   type        = string
 }
 
-variable "security_group_ids" {
-  description = "List of security group IDs to associate with the instance"
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs"
   type        = list(string)
 }
 
-variable "key_name" {
-  description = "Key pair name for SSH access"
-  type        = string
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs"
+  type        = list(string)
 }
 
-variable "tags" {
-  description = "A map of tags to assign to the instance"
-  type        = map(string)
-  default     = {}
+variable "desired_capacity" {
+  description = "Desired number of worker nodes"
+  type        = number
 }
 
-variable "project_name" {
-  description = "name of the eks ec2-server"
-  type        = string
-  default     = "eks-server"
-}
-
-
-variable "node_group_name" {
-  description = "name of the node_group"
+variable "node_instance_type" {
+  description = "Instance type for worker nodes"
   type        = string
 }

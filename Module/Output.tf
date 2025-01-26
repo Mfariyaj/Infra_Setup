@@ -11,9 +11,9 @@ output "private_subnet_ids" {
 }
 
 output "master_arn" {
-  value = aws_iam_role.master.arn
+  value = module.aws_iam_role.master.arn
 }
 
 output "worker_arn" {
-  value = aws_iam_role.worker.arn
+  value = module.aws_iam_role.worker.arn
 }
