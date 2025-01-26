@@ -52,7 +52,7 @@ module "IAM_EKS_Role" {
 
 
 module "eks" {
-  source                = "../Services/eks"
+  source                = "../Services/EKS"
   cluster_name          = var.eks_cluster_name
   vpc_id                = module.iam.vpc_id
   eks_node_instance_type = var.eks_node_instance_type
