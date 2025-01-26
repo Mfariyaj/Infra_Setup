@@ -121,3 +121,4 @@ resource "aws_iam_instance_profile" "worker" {
   depends_on = [aws_iam_role.worker]
   name       = "EKS-worker-node-profile"
   role       = aws_iam_role.worker.name
+}
