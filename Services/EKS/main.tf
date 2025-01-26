@@ -27,18 +27,6 @@ resource "aws_eks_cluster" "eks" {
 #   owners = ["099720109477"]
 # }
 
-# Creating kubectl server
-resource "aws_instance" "kubectl-server" {
-  ami                         = var.ami_id
-  key_name                    = var.key_name
-  instance_type               = var.instance_type
-  associate_public_ip_address = true
-  subnet_id     = var.subnet_id
-  vpc_security_group_ids = var.security_group_ids
-  tags = merge(var.tags, { "Name" = var.aws_instance })
-}
-
-# Creating Worker Node Group
 resource "aws_eks_node_group" "node-grp" {
   cluster_name    = aws_eks_cluster.eks.name
   node_group_name = var.node_group_name
