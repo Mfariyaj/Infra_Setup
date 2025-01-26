@@ -8,12 +8,12 @@ variable "eks_role_arn" {
   type        = string
 }
 
-variable "private_subnet_ids" {
+variable "private_subnet" {
   description = "Private subnet IDs for the EKS cluster"
   type        = list(string)
 }
 
-variable "public_subnet_ids" {
+variable "public_subnet" {
   description = "Private subnet IDs for the EKS cluster"
   type        = list(string)
 }
