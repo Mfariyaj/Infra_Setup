@@ -1,4 +1,11 @@
-# EKS Cluster ID
-output "aws_eks_cluster_name" {
-  value = aws_eks_cluster.eks.id
+output "cluster_name" {
+  value = aws_eks_cluster.main.name
+}
+
+output "cluster_endpoint" {
+  value = aws_eks_cluster.main.endpoint
+}
+
+output "cluster_id" {
+  value = aws_eks_cluster.main.id
 }

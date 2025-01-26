@@ -52,6 +52,3 @@ resource "aws_iam_role_policy_attachment" "eks_worker_autoscaler_policy_attachme
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-resource "aws_vpc" "eks_vpc" {
-  cidr_block = var.vpc_cidr
-}

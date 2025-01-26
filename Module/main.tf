@@ -52,13 +52,11 @@ module "IAM_EKS_Role" {
 
 
 module "eks" {
-  source               = "../Services/EKS"
-  cluster_name         = var.eks_cluster_name
-  private_subnet_ids   = module.vpc.private_subnet_ids
-  public_subnet_ids    = module.vpc.public_subnet_ids
-  cluster_role_arn     = module.iam.eks_role_arn
-  node_role_arn        = module.iam.node_role_arn
-  desired_capacity     = var.desired_capacity
-  node_instance_type   = var.node_instance_type
+  source                = "./modules/eks"
+  cluster_name          = var.eks_cluster_name
+  vpc_id                = module.iam.vpc_id
+  eks_node_instance_type = var.eks_node_instance_type
+  node_group_size       = var.node_group_desired_size
+  eks_role_arn          = module.iam.eks_role_arn
 }
 

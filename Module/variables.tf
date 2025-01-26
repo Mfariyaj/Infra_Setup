@@ -102,19 +102,19 @@ variable "tags" {
 }
 
 variable "eks_cluster_name" {
-  description = "EKS cluster name"
+  description = "Name of the EKS Cluster"
   type        = string
   default     = "my-eks-cluster"
 }
 
-variable "node_instance_type" {
-  description = "EC2 instance type for worker nodes"
+variable "eks_node_instance_type" {
+  description = "Instance type for EKS worker nodes"
   type        = string
-  default     = "t3.micro"
+  default     = "t3.medium"
 }
 
-variable "desired_capacity" {
-  description = "Desired number of worker nodes"
+variable "node_group_desired_size" {
+  description = "Number of worker nodes in the EKS cluster"
   type        = number
   default     = 2
 }
