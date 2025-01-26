@@ -101,8 +101,24 @@ variable "tags" {
   default     = {}
 }
 
-variable "node_group_name" {
-  description = "AMI ID for the EC2 instance"
-  type   = string  
-  default = "node_group_name"
+variable "cluster_name" {
+  type   = string 
+}
+variable "cluster_role_arn" {
+  type   = string 
+}
+variable "node_role_arn" {
+  type   = string 
+}
+variable "private_subnet_ids" {
+  type = list(string)
+}
+variable "public_subnet_ids" {
+  type = list(string)
+}
+variable "desired_capacity" {
+  type = number
+}
+variable "node_instance_type" {
+  type = string
 }
