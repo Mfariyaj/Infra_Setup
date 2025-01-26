@@ -54,7 +54,6 @@ module "IAM_EKS_Role" {
 module "eks" {
   source               = "../Services/EKS"
   cluster_name         = var.eks_cluster_name
-  vpc_id               = module.vpc.vpc_id
   private_subnet_ids   = module.vpc.private_subnet_ids
   public_subnet_ids    = module.vpc.public_subnet_ids
   cluster_role_arn     = module.iam.eks_role_arn
