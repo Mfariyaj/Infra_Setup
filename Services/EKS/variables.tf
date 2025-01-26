@@ -1,29 +1,42 @@
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
+  default     = "my-eks-cluster"
 }
 
-variable "eks_role_arn" {
-  description = "ARN of the IAM role for the EKS cluster"
+variable "cluster_version" {
+  description = "Kubernetes version for the EKS cluster"
+  type        = string
+  default     = "1.27"
+}
+
+variable "vpc_id" {
+  description = "VPC ID for the EKS cluster"
   type        = string
 }
 
-variable "private_subnet" {
-  description = "Private subnet IDs for the EKS cluster"
+variable "public_subnet_ids" {
+  description = "Public subnet IDs"
   type        = list(string)
 }
 
-variable "public_subnet" {
-  description = "Private subnet IDs for the EKS cluster"
+variable "private_subnet_ids" {
+  description = "Private subnet IDs"
   type        = list(string)
 }
 
-variable "node_instance_type" {
-  description = "Instance type for the worker nodes"
+variable "cluster_role_arn" {
+  description = "IAM Role ARN for the EKS cluster"
   type        = string
 }
 
-variable "node_group_size" {
-  description = "Desired number of worker nodes"
-  type        = number
+variable "node_role_arn" {
+  description = "IAM Role ARN for the EKS node group"
+  type        = string
+}
+
+variable "key_name" {
+  description = "EC2 key pair name for SSH access"
+  type        = string
+  default     = "my-key"
 }
