@@ -118,10 +118,6 @@ variable "node_group_desired_size" {
   type        = number
   default     = 2
 }
-variable "vpc_cidr" {
-  description = "CIDR block for the VPC"
-  type        = string
-}
 
 variable "eks_role_arn" {
   description = "ARN of the IAM role for the EKS cluster"
