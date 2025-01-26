@@ -10,10 +10,10 @@ output "private_subnet_ids" {
   value = module.vpc.private_subnet_ids
 }
 
-output "master_arn" {
-  value = module.aws_iam_role.master.arn
+output "eks_role_arn" {
+  value = aws_iam_role.eks_role.arn
 }
 
-output "worker_arn" {
-  value = module.aws_iam_role.worker.arn
+output "node_role_arn" {
+  value = aws_iam_role.node_role.arn
 }

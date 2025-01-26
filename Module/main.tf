@@ -2,6 +2,20 @@ provider "aws" {
   region = var.region
 }
 
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  token                  = data.aws_eks_cluster_auth.cluster.token
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    token                  = data.aws_eks_cluster_auth.cluster.token
+    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  }
+}
+
 module "vpc" {
   source           = "../Services/VPC"
   vpc_cidr         = var.vpc_cidr
@@ -20,34 +34,32 @@ module "security_group" {
   tags          = var.tags
 }
 
-# module "ec2_instance" {
-#   source             = "../Services/EC2"
-#   instance_name      = var.instance_name
-#   ami_id             = var.ami_id
-#   instance_type      = var.instance_type
-#   subnet_id          = element(module.vpc.public_subnet_ids, 0)
-#   security_group_ids = [module.security_group.security_group_id]
-#   key_name           = var.key_name
-#   tags               = var.tags
-# }
+module "ec2_instance" {
+  source             = "../Services/EC2"
+  instance_name      = var.instance_name
+  ami_id             = var.ami_id
+  instance_type      = var.instance_type
+  subnet_id          = element(module.vpc.public_subnet_ids, 0)
+  security_group_ids = [module.security_group.security_group_id]
+  key_name           = var.key_name
+  tags               = var.tags
+}
 
 module "IAM_EKS_Role" {
 
   source = "../Services/iam-policy-eks"
 }
 
-module "EKS" {
 
-  source = "../Services/EKS" 
-  instance_name      = var.instance_name
-  ami_id             = var.ami_id
-  instance_type      = var.instance_type
-  subnet_id          = module.vpc.public_subnet_ids
-  security_group_ids = [module.security_group.security_group_id]
-  master_arn         = module.output.master_arn
-  worker_arn       = module.output.worker_arn
-  node_group_name    = var.node_group_name
-  key_name           = var.key_name
-  tags               = var.tags
-
+module "eks" {
+  source               = "./modules/eks"
+  cluster_name         = var.eks_cluster_name
+  vpc_id               = module.vpc.vpc_id
+  private_subnet_ids   = module.vpc.private_subnet_ids
+  public_subnet_ids    = module.vpc.public_subnet_ids
+  cluster_role_arn     = module.iam.eks_role_arn
+  node_role_arn        = module.iam.node_role_arn
+  desired_capacity     = var.desired_capacity
+  node_instance_type   = var.node_instance_type
 }
+
