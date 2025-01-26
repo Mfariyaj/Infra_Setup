@@ -1,14 +1,7 @@
-# IAM Worker Node Instance Profile 
-output "instance_profile" {
-  value = aws_iam_instance_profile.worker.name
+output "vpc_id" {
+  value = aws_vpc.eks_vpc.id
 }
 
-# IAM Role Master's ARN
-output "master_arn" {
-  value = aws_iam_role.master.arn
-}
-
-# IAM Role Worker's ARN
-output "worker_arn" {
-  value = aws_iam_role.worker.arn
+output "eks_role_arn" {
+  value = aws_iam_role.eks_role.arn
 }
