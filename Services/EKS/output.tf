@@ -1,11 +1,11 @@
-output "cluster_name" {
-  value = aws_eks_cluster.main.name
+output "cluster_id" {
+  value = module.eks.cluster_id
 }
 
 output "cluster_endpoint" {
-  value = aws_eks_cluster.main.endpoint
+  value = module.eks.cluster_endpoint
 }
 
-output "cluster_id" {
-  value = aws_eks_cluster.main.id
+output "node_group_name" {
+  value = module.eks.node_groups["eks_node_group"]
 }
