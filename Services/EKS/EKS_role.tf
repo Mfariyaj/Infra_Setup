@@ -22,11 +22,19 @@ resource "aws_iam_role" "eks_cluster_role" {
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   role       = aws_iam_role.eks_cluster_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  access_scope {
+    type = "cluster"
+  }
+}
 }
 
 resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller" {
   role       = aws_iam_role.eks_cluster_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+  access_scope {
+    type = "cluster"
+  }
+}
 }
 
 # Node IAM Role
@@ -53,14 +61,26 @@ resource "aws_iam_role" "eks_worker_role" {
 resource "aws_iam_role_policy_attachment" "worker_node_policy" {
   role       = aws_iam_role.eks_worker_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+  access_scope {
+    type = "cluster"
+  }
+}
 }
 
 resource "aws_iam_role_policy_attachment" "cni_policy" {
   role       = aws_iam_role.eks_worker_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  access_scope {
+    type = "cluster"
+  }
+}
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_container_registry_read_only" {
   role       = aws_iam_role.eks_worker_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  access_scope {
+    type = "cluster"
+  }
+}
 }
