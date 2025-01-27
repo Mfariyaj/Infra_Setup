@@ -54,8 +54,8 @@ module "eks" {
   source              = "../Services/EKS"
   cluster_name        = var.cluster_name
   vpc_id              = module.vpc.vpc_id
-  public_subnets      = [module.vpc.public_subnet_ids]
-  private_subnets     = [module.vpc.private_subnet_ids]
+  public_subnets      = module.vpc.public_subnet_ids
+  private_subnets     = module.vpc.private_subnet_ids
   cluster_role_arn    = module.eks.eks_cluster_arn
   node_role_arn       = module.eks.eks_worker_arn
 }
