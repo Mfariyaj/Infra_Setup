@@ -51,7 +51,7 @@ module "IAM_EKS_Role" {
 }
 
 module "eks" {
-  source      = "./modules/eks"
+  source      = "../Services/EKS"
   cluster_name = "my-eks-cluster"
   subnet_ids   = [var.public_subnets]
 }
