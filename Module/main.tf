@@ -51,31 +51,9 @@ module "IAM_EKS_Role" {
 }
 
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
-
-  cluster_name    = "my-eks-cluster"
-  cluster_version = "20.33.1"
-
-  vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.public_subnets
-
-  cluster_role_arn = module.eks_roles.eks_cluster_role_arn
-  node_groups = {
-    eks_nodes = {
-      desired_capacity = 2
-      max_size         = 3
-      min_size         = 1
-
-      instance_type = "t3.medium"
-      key_name      = var.key_name
-
-      iam_role_arn = module.eks_roles.eks_node_group_role_arn
-    }
-  }
-
-  tags = {
-    Environment = "dev"
-  }
+  source      = "./modules/eks"
+  cluster_name = "my-eks-cluster"
+  subnet_ids   = [module.vpc.public_subnet_id]
 }
 
 
