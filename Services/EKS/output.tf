@@ -4,7 +4,7 @@ output "eks_cluster_name" {
 
 output "cluster_id" {
   description = "ID of the EKS cluster"
-  value       = aws_eks_cluster.this.id
+  value       = aws_eks_cluster.eks_nodes.id
 }
 
 output "eks_cluster_endpoint" {
