@@ -5,7 +5,7 @@ resource "aws_instance" "ec2" {
   security_groups = null # Keep null, as we use security_group_ids below
   vpc_security_group_ids = var.security_group_ids
   key_name      = var.key_name
-  user_data = file("./eks-install.sh")
+  user_data = file("${path.module}/eks-install.sh")
   tags = merge(var.tags, { "Name" = var.instance_name })
 }
 
