@@ -34,16 +34,16 @@ module "security_group" {
   tags          = var.tags
 }
 
-module "ec2_instance" {
-  source             = "../Services/EC2"
-  instance_name      = var.instance_name
-  ami_id             = var.ami_id
-  instance_type      = var.instance_type
-  subnet_id          = element(module.vpc.public_subnet_ids, 0)
-  security_group_ids = [module.security_group.security_group_id]
-  key_name           = var.key_name
-  tags               = var.tags
-}
+# module "ec2_instance" {
+#  source             = "../Services/EC2"
+#  instance_name      = var.instance_name
+#  ami_id             = var.ami_id
+#  instance_type      = var.instance_type
+#  subnet_id          = element(module.vpc.public_subnet_ids, 0)
+#  security_group_ids = [module.security_group.security_group_id]
+#  key_name           = var.key_name
+#  tags               = var.tags
+#}
 
 #module "IAM_EKS_Role" {
 
@@ -57,7 +57,7 @@ module "eks" {
   public_subnets      = [module.vpc.public_subnet_ids]
   private_subnets     = [module.vpc.private_subnet_ids]
   cluster_role_arn    = module.eks.eks_cluster_arn
-  node_role_arn       = aws_iam_role.eks_worker_role.arn
+  node_role_arn       = module.eks.eks_worker_arn
 }
 
 
