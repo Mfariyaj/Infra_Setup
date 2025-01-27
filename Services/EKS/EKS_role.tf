@@ -34,7 +34,6 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller" {
     type = "cluster"
   }
 }
-}
 
 # Node IAM Role
 resource "aws_iam_role" "eks_worker_role" {
@@ -64,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "worker_node_policy" {
     type = "cluster"
   }
 }
-}
+
 
 resource "aws_iam_role_policy_attachment" "cni_policy" {
   role       = aws_iam_role.eks_worker_role.name
@@ -73,7 +72,7 @@ resource "aws_iam_role_policy_attachment" "cni_policy" {
     type = "cluster"
   }
 }
-}
+
 
 resource "aws_iam_role_policy_attachment" "ec2_container_registry_read_only" {
   role       = aws_iam_role.eks_worker_role.name
@@ -82,4 +81,4 @@ resource "aws_iam_role_policy_attachment" "ec2_container_registry_read_only" {
     type = "cluster"
   }
 }
-}
+
