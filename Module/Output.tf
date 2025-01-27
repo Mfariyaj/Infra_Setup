@@ -28,7 +28,9 @@ output "eks_cluster_arn" {
 output "eks_worker_arn" {
   value = module.eks.eks_worker_arn
 }
-
+output "cluster_id" {
+  value = module.eks.cluster_id
+}
 
 
 
