@@ -25,6 +25,10 @@ output "eks_cluster_endpoint" {
 output "eks_cluster_arn" {
   value = module.eks.eks_cluster_arn
 }
+output "eks_worker_arn" {
+  value = module.eks.eks_worker_arn
+}
+
 
 
 
