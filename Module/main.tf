@@ -53,7 +53,7 @@ module "IAM_EKS_Role" {
 module "eks" {
   source      = "./modules/eks"
   cluster_name = "my-eks-cluster"
-  subnet_ids   = [module.vpc.public_subnet_id]
+  subnet_ids   = [var.public_subnets]
 }
 
 
