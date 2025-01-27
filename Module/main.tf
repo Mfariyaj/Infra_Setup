@@ -45,10 +45,10 @@ module "ec2_instance" {
   tags               = var.tags
 }
 
-module "IAM_EKS_Role" {
+#module "IAM_EKS_Role" {
 
-  source = "../Services/iam-policy-eks"
-}
+#  source = "../Services/iam-policy-eks"
+#}
 
 module "eks" {
   source              = "../Services/EKS"
