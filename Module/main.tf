@@ -56,7 +56,7 @@ module "eks" {
   vpc_id              = module.vpc.vpc_id
   public_subnets      = [module.vpc.public_subnet_ids]
   private_subnets     = [module.vpc.private_subnet_ids]
-  cluster_role_arn    = aws_iam_role.eks_cluster_role.arn
+  cluster_role_arn    = [module.eks.eks_cluster_arn]
   node_role_arn       = aws_iam_role.eks_worker_role.arn
 }
 
