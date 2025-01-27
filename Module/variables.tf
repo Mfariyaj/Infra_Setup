@@ -119,7 +119,3 @@ variable "node_group_desired_size" {
   default     = 2
 }
 
-variable "eks_role_arn" {
-  description = "ARN of the IAM role for the EKS cluster"
-  type        = string
-}
