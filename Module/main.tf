@@ -57,7 +57,7 @@ module "eks" {
   cluster_version = "1.26"
 
   vpc_id     = module.vpc.vpc_id
-  subnet_ids = module.vpc.subnet_ids
+  subnet_ids = module.vpc.public_subnets
 
   cluster_role_arn = module.eks_roles.eks_cluster_role_arn
   node_groups = {
