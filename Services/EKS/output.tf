@@ -11,7 +11,7 @@ output "eks_cluster_arn" {
 }
 
 output "eks_worker_arn" {
-  value = aws_eks_cluster.eks_cluster.arn
+  value = aws_eks_cluster.eks_worker.arn
 }
 
 output "node_group_name" {
