@@ -10,7 +10,7 @@ resource "aws_instance" "ec2" {
 }
 
 resource "aws_ebs_volume" "ebs" {
-  availability_zone = var.instance_type
+  availability_zone = var.subnet_id
   size              = 15
 
 }
