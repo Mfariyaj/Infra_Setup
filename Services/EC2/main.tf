@@ -10,8 +10,17 @@ resource "aws_instance" "ec2" {
 }
 
 resource "aws_ebs_volume" "ebs" {
-  availability_zone = var.subnet_id
+  availability_zone = data.aws_subnet.selected_subnet.availability_zone
   size              = 15
-
+  tags = merge(var.tags, { "Name" = "${var.instance_name}-ebs" })
 }
 
+resource "aws_volume_attachment" "ebs_attachment" {
+  device_name = "/dev/xvdf" # Update as needed
+  volume_id   = aws_ebs_volume.ebs.id
+  instance_id = aws_instance.ec2.id
+}
+
+data "aws_subnet" "selected_subnet" {
+  id = var.subnet_id
+}
