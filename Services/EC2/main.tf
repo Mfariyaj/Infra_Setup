@@ -9,3 +9,9 @@ resource "aws_instance" "ec2" {
   tags = merge(var.tags, { "Name" = var.instance_name })
 }
 
+resource "aws_ebs_volume" "ebs" {
+  availability_zone = var.instance_type
+  size              = 15
+
+}
+
