@@ -48,10 +48,21 @@ variable "ingress_rules" {
       to_port     = 80
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+        {
+      from_port   = 9000
+      to_port     = 9000
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
     }
   ]
 }
-
 variable "egress_rules" {
   description = "Egress rules for the security group"
   type = list(object({
