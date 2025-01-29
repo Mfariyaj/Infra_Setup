@@ -24,7 +24,3 @@ resource "aws_volume_attachment" "ebs_attachment" {
 data "aws_subnet" "selected_subnet" {
   id = var.subnet_id
 }
-
-resource "aws_instance" "install_argocd_monitoring_tool" {
-  depends_on = [data.aws_instance.ec2]
-
