@@ -24,3 +24,34 @@ resource "aws_volume_attachment" "ebs_attachment" {
 data "aws_subnet" "selected_subnet" {
   id = var.subnet_id
 }
+
+resource "aws_instance" "install_argocd" {
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = "ec2-user" # Change based on your OS (e.g., ubuntu for Ubuntu AMIs)
+      private_key = file("~/.ssh/my-key.pem") # Update with your actual key
+      host        = aws_instance.existing_ec2.public_ip
+    }
+
+    inline = [
+      "#!/bin/bash",
+      "sudo yum install -y jq",  # Use apt for Ubuntu
+      "kubectl create namespace argocd",
+      "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml",
+      "kubectl wait --for=condition=available --timeout=600s deployment -n argocd -l app.kubernetes.io/name=argocd-server",
+      "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
+      "ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')",
+      "ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d)",
+      "echo \"ArgoCD Server: $ARGOCD_SERVER\"",
+      "echo \"ArgoCD Admin Password: $ARGO_PWD\"",
+      "helm repo add stable https://charts.helm.sh/stable",
+      "helm repo add prometheus-community https://prometheus-community.github.io/helm-charts",
+      "helm repo add grafana https://grafana.github.io/helm-charts",
+      "helm repo update",
+      "helm install prometheus prometheus-community/prometheus",
+      "helm install grafana grafana/grafana"
+    ]
+  }
+}
+
