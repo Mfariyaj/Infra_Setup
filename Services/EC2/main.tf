@@ -25,24 +25,25 @@ data "aws_subnet" "selected_subnet" {
   id = var.subnet_id
 }
 
-resource "aws_instance" "install_argocd" {
+resource "aws_instance" "install_argocd_monitoring_tool" {
+  depends_on = [data.aws_instance.ec2]
+
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
-      user        = "ec2-user" # Change based on your OS (e.g., ubuntu for Ubuntu AMIs)
-      private_key = file("/home/ubuntu/.ssh/id_ed25519") # Update with your actual key
-      host        = aws_instance.ec2.public_ip
+      user        = "ec2-user" # Update based on your OS (e.g., ubuntu for Ubuntu AMIs)
+      private_key = file("~/.ssh/my-key.pem") # Ensure this path is correct and accessible
+      host        = data.aws_instance.ec2.public_ip
     }
 
     inline = [
-      "#!/bin/bash",
       "sudo yum install -y jq",  # Use apt for Ubuntu
       "kubectl create namespace argocd",
       "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml",
       "kubectl wait --for=condition=available --timeout=600s deployment -n argocd -l app.kubernetes.io/name=argocd-server",
       "kubectl patch svc argocd-server -n argocd -p '{\"spec\": {\"type\": \"LoadBalancer\"}}'",
-      "ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')",
-      "ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d)",
+      "export ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')",
+      "export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d)",
       "echo \"ArgoCD Server: $ARGOCD_SERVER\"",
       "echo \"ArgoCD Admin Password: $ARGO_PWD\"",
       "helm repo add stable https://charts.helm.sh/stable",
@@ -54,4 +55,3 @@ resource "aws_instance" "install_argocd" {
     ]
   }
 }
-
