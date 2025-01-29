@@ -31,7 +31,7 @@ resource "aws_instance" "install_argocd" {
       type        = "ssh"
       user        = "ec2-user" # Change based on your OS (e.g., ubuntu for Ubuntu AMIs)
       private_key = file("/home/ubuntu/.ssh/id_ed25519") # Update with your actual key
-      host        = aws_instance.existing_ec2.public_ip
+      host        = aws_instance.ec2.public_ip
     }
 
     inline = [
