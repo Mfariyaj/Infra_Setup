@@ -5,20 +5,16 @@ resource "aws_instance" "ec2" {
   security_groups = null # Keep null, as we use security_group_ids below
   vpc_security_group_ids = var.security_group_ids
   key_name      = var.key_name
-  user_data = file("${path.module}/eks-install.sh")
-  tags = merge(var.tags, { "Name" = var.instance_name })
-}
+  user_data     = file("${path.module}/eks-install.sh")
+  tags          = merge(var.tags, { "Name" = var.instance_name })
 
-resource "aws_ebs_volume" "ebs" {
-  availability_zone = data.aws_subnet.selected_subnet.availability_zone
-  size              = 15
-  tags = merge(var.tags, { "Name" = "${var.instance_name}-ebs" })
-}
-
-resource "aws_volume_attachment" "ebs_attachment" {
-  device_name = "/dev/xvdf" # Update as needed
-  volume_id   = aws_ebs_volume.ebs.id
-  instance_id = aws_instance.ec2.id
+  # Add root_block_device to increase the root volume size
+  root_block_device {
+    volume_size = 30 # Set the desired size in GB (e.g., 30 GB)
+    volume_type = "gp3" # You can change this to "gp3" or other types if needed
+    # Optional: Add tags to the root volume
+    tags = merge(var.tags, { "Name" = "${var.instance_name}-root-volume" })
+  }
 }
 
 data "aws_subnet" "selected_subnet" {
