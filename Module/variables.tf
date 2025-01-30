@@ -90,7 +90,7 @@ variable "instance_name" {
 variable "instance_type" {
   description = "Name of the EC2 instance"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.medium"
 }
 
 
