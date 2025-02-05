@@ -74,3 +74,29 @@ sudo apt install trivy -y
 # Intalling Helm
 #! /bin/bash
 sudo snap install helm --classic
+
+
+# Install dependencies
+  sudo yum install -y jq  # Use apt for Ubuntu
+ 
+  # Install ArgoCD
+  kubectl create namespace argocd
+  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
+  kubectl wait --for=condition=available --timeout=600s deployment -n argocd -l app.kubernetes.io/name=argocd-server
+  # Expose ArgoCD via LoadBalancer
+  kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+ 
+  # Retrieve ArgoCD server address and admin password
+  ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')
+  ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+  echo "ArgoCD Server: $ARGOCD_SERVER"
+  echo "ArgoCD Admin Password: $ARGO_PWD"
+ 
+  # Install Helm repositories and applications
+  helm repo add stable https://charts.helm.sh/stable
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  helm repo add grafana https://grafana.github.io/helm-charts
+  helm repo update
+ 
+  helm install prometheus prometheus-community/prometheus
+  helm install grafana grafana/grafana
