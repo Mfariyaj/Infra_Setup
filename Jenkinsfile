@@ -1,3 +1,4 @@
+
 properties([
     parameters([
         choice(choices: ['dev', 'staging', 'prod'], name: 'Environment'),
@@ -25,7 +26,7 @@ pipeline {
         stage('Init') {
             steps {
                 echo 'Initializing Terraform with reconfiguration...'
-                withAWS(credentials: 'ecr_user', region: 'us-east-1') {
+                withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                     sh "terraform -chdir=${TERRAFORM_DIR} init"
                 }
             }
@@ -33,7 +34,7 @@ pipeline {
                 stage('Validate') {
             steps {
                 echo 'Validating Terraform configuration...'
-                withAWS(credentials: 'ecr_user', region: 'us-east-1') {
+                withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                     sh "terraform -chdir=${TERRAFORM_DIR} validate"
                 }
             }
@@ -41,7 +42,7 @@ pipeline {
         stage('Action') {
             steps {
                 echo "Executing Terraform action: ${params.Terraform_Action}..."
-                withAWS(credentials: 'ecr_user', region: 'us-east-1') {
+                withAWS(credentials: 'aws_creds', region: 'us-east-1') {
                     script {
                         switch (params.Terraform_Action) {
                             case 'plan':
