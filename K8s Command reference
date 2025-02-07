@@ -1,0 +1,157 @@
+Cluster Management
+kubectl version
+Displays the client and server version of Kubernetes.
+
+kubectl cluster-info
+Shows information about the Kubernetes cluster.
+
+kubectl config view
+Displays the current Kubernetes configuration.
+
+kubectl get nodes
+Lists all nodes in the cluster.
+
+kubectl top node
+Displays resource usage (CPU, memory) for nodes.
+
+kubectl top pod
+Displays resource usage for pods.
+
+kubectl describe node <node-name>
+Provides detailed information about a specific node.
+
+kubectl cordon <node-name>
+Marks a node as unschedulable.
+
+kubectl uncordon <node-name>
+Marks a node as schedulable.
+
+kubectl drain <node-name>
+Safely evicts all pods from a node for maintenance.
+
+Namespace Management
+kubectl get namespaces
+Lists all namespaces.
+
+kubectl create namespace <namespace-name>
+Creates a new namespace.
+
+kubectl delete namespace <namespace-name>
+Deletes a namespace.
+
+kubectl config set-context --current --namespace=<namespace-name>
+Switches the current context to a specific namespace.
+
+Pod Management
+kubectl get pods
+Lists all pods in the current namespace.
+
+kubectl get pods -o wide
+Lists pods with additional details like node and IP.
+
+kubectl describe pod <pod-name>
+Provides detailed information about a specific pod.
+
+kubectl logs <pod-name>
+Displays logs for a specific pod.
+
+kubectl logs -f <pod-name>
+Streams logs from a pod in real-time.
+
+kubectl exec -it <pod-name> -- /bin/sh
+Opens an interactive shell inside a pod.
+
+kubectl delete pod <pod-name>
+Deletes a specific pod.
+
+kubectl port-forward <pod-name> <local-port>:<pod-port>
+Forwards a local port to a pod.
+
+kubectl cp <pod-name>:<file-path> <local-path>
+Copies files from a pod to the local machine.
+
+kubectl apply -f <pod-definition.yaml>
+Creates or updates a pod using a YAML file.
+
+kubectl run <pod-name> --image=<image-name>
+Creates a pod using a specific image.
+
+Deployment Management
+kubectl get deployments
+Lists all deployments.
+
+kubectl describe deployment <deployment-name>
+Provides detailed information about a deployment.
+
+kubectl scale deployment <deployment-name> --replicas=<number>
+Scales a deployment to a specific number of replicas.
+
+kubectl rollout status deployment/<deployment-name>
+Displays the rollout status of a deployment.
+
+kubectl rollout history deployment/<deployment-name>
+Shows the rollout history of a deployment.
+
+kubectl rollout undo deployment/<deployment-name>
+Reverts a deployment to the previous version.
+
+kubectl delete deployment <deployment-name>
+Deletes a deployment.
+
+Service Management
+kubectl get services
+Lists all services.
+
+kubectl describe service <service-name>
+Provides detailed information about a service.
+
+kubectl expose deployment <deployment-name> --type=<service-type>
+Exposes a deployment as a service.
+
+kubectl delete service <service-name>
+Deletes a service.
+
+ConfigMap and Secret Management
+kubectl get configmaps
+Lists all ConfigMaps.
+
+kubectl create configmap <configmap-name> --from-file=<file-path>
+Creates a ConfigMap from a file.
+
+kubectl get secrets
+Lists all secrets.
+
+kubectl create secret generic <secret-name> --from-literal=<key>=<value>
+Creates a secret from a key-value pair.
+
+Job and CronJob Management
+kubectl get jobs
+Lists all jobs.
+
+kubectl describe job <job-name>
+Provides detailed information about a job.
+
+kubectl get cronjobs
+Lists all CronJobs.
+
+kubectl describe cronjob <cronjob-name>
+Provides detailed information about a CronJob.
+
+Resource Management
+kubectl get all
+Lists all resources (pods, services, deployments, etc.).
+
+kubectl explain <resource-type>
+Provides documentation for a specific resource type.
+
+kubectl edit <resource-type>/<resource-name>
+Opens the resource definition in the default editor for modification.
+
+kubectl apply -f <file.yaml>
+Applies a configuration from a YAML file.
+
+kubectl delete -f <file.yaml>
+Deletes resources defined in a YAML file.
+
+kubectl api-resources
+Lists all supported API resources.
