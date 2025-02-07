@@ -1,0 +1,316 @@
+#!/bin/bash
+
+# 1. Setting Up Git
+# Set your name and email globally (first-time setup)
+echo "Setting up user name and email..."
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+echo "Git user configured."
+
+# 2. Initialize a New Git Repository
+# Initializes a new Git repository in the current directory
+echo "Initializing a new Git repository..."
+git init
+echo "New Git repository initialized."
+
+# 3. Clone an Existing Repository
+# Cloning a repository from GitHub (replace with an actual URL)
+echo "Cloning a repository..."
+git clone https://github.com/username/repository.git
+echo "Repository cloned."
+
+# 4. Check the Status of Your Files
+# View the status of your files (modified, staged, untracked)
+echo "Checking the status of files..."
+git status
+echo "File status checked."
+
+# 5. Add a File to the Staging Area
+# Add a specific file to staging (replace <filename> with the actual file)
+echo "Adding file to staging area..."
+git add <filename>
+echo "File added to staging."
+
+# 6. Commit Changes
+# Commit the staged changes with a message
+echo "Committing changes..."
+git commit -m "Your commit message"
+echo "Changes committed."
+
+# 7. Branching Commands
+# Create a new branch
+echo "Creating a new branch..."
+git branch <branch-name>
+# Switch to an existing branch
+echo "Switching to another branch..."
+git checkout <branch-name>
+# Create and switch to a new branch in one command
+echo "Creating and switching to a new branch..."
+git checkout -b <new-branch-name>
+# List all branches
+echo "Listing branches..."
+git branch
+# Delete a branch
+echo "Deleting a branch..."
+git branch -d <branch-name>
+
+# 8. Remote Repositories
+# Add a remote repository (replace <repository-url> with the actual URL)
+echo "Adding a remote repository..."
+git remote add origin <repository-url>
+# View remotes
+echo "Viewing remotes..."
+git remote -v
+# Push changes to the remote repository
+echo "Pushing changes to remote..."
+git push origin <branch-name>
+# Pull changes from the remote repository
+echo "Pulling changes from remote..."
+git pull origin <branch-name>
+
+# 9. Merging Branches
+# Merge changes from a different branch into the current branch
+echo "Merging changes from another branch..."
+git merge <branch-name>
+
+# 10. Viewing History
+# View commit history
+echo "Viewing commit history..."
+git log
+# View a simplified, one-line history of commits
+echo "Viewing summarized commit history..."
+git log --oneline
+
+# 11. Undo Changes
+# Unstage a file (remove it from staging)
+echo "Unstaging a file..."
+git reset <filename>
+# Discard changes in a file (restore the last commit version)
+echo "Discarding changes in a file..."
+git checkout -- <filename>
+
+# 12. Working with Tags
+# Create a tag (e.g., for a release)
+echo "Creating a tag..."
+git tag <tag-name>
+# List all tags
+echo "Listing tags..."
+git tag
+
+# 13. Viewing Differences
+# View changes that are not staged
+echo "Viewing changes not staged for commit..."
+git diff
+# View changes that are staged
+echo "Viewing changes staged for commit..."
+git diff --cached
+
+# 14. Stashing Changes
+# Stash your uncommitted changes
+echo "Stashing changes..."
+git stash
+# List stashed changes
+echo "Listing stashed changes..."
+git stash list
+# Apply the latest stashed changes
+echo "Applying stashed changes..."
+git stash apply
+# Drop the most recent stash
+echo "Dropping the most recent stash..."
+git stash drop
+
+# 15. Reverting Changes
+# Revert a commit by creating a new commit that undoes the changes
+echo "Reverting a commit..."
+git revert <commit-hash>
+
+# 16. Resetting Changes
+# Reset to a previous commit (use with caution)
+echo "Resetting to a previous commit..."
+git reset --hard <commit-hash>
+
+# 17. Cherry-picking Commits
+# Apply a commit from another branch to your current branch
+echo "Cherry-picking a commit..."
+git cherry-pick <commit-hash>
+
+# 18. Working with Remote Branches
+# Fetch remote branches without merging
+echo "Fetching remote branches..."
+git fetch
+# Checkout a remote branch
+echo "Checking out a remote branch..."
+git checkout -t origin/<branch-name>
+
+# 19. Fetching and Merging Changes
+# Fetch changes from the remote and merge them into your current branch
+echo "Fetching and merging changes..."
+git pull --rebase
+
+# 20. Diffing Between Branches
+# Compare two branches
+echo "Comparing branches..."
+git diff <branch1>..<branch2>
+
+# 21. Rebasing
+# Rebase your current branch onto another branch (to keep history linear)
+echo "Rebasing current branch onto another..."
+git rebase <branch-name>
+
+# 22. Viewing the Commit Tree
+# Visualize commit history as a graph
+echo "Viewing the commit tree..."
+git log --graph --oneline --all
+
+# 23. Viewing a Specific Commit
+# Show the details of a specific commit
+echo "Viewing a specific commit..."
+git show <commit-hash>
+
+# 24. Removing Files
+# Remove a file from Git tracking (without deleting from the disk)
+echo "Removing a file from tracking..."
+git rm --cached <filename>
+# Remove a file entirely (from both Git and disk)
+echo "Removing a file completely..."
+git rm <filename>
+
+# 25. Creating and Viewing Patches
+# Create a patch file from changes between commits
+echo "Creating a patch file..."
+git diff <commit1> <commit2> > patchfile.diff
+# Apply a patch file
+echo "Applying a patch file..."
+git apply patchfile.diff
+
+# 26. Configuring Aliases
+# Create a shortcut for a commonly used Git command
+echo "Setting up an alias for a command..."
+git config --global alias.co checkout
+git config --global alias.br branch
+
+# 27. Viewing a List of Staged Changes
+# View staged changes without committing
+echo "Viewing staged changes..."
+git diff --staged
+
+# 28. Working with Submodules
+# Add a submodule to the project
+echo "Adding a submodule..."
+git submodule add <repository-url> <path-to-submodule>
+# Initialize and update submodules
+echo "Initializing submodules..."
+git submodule update --init --recursive
+
+# 29. Viewing and Searching the Git Index
+# Search for a specific string in the repository's history
+echo "Searching for a string in history..."
+git grep "<string>"
+
+# 30. Viewing Remote Branches
+# List all branches on the remote repository
+echo "Listing remote branches..."
+git branch -r
+
+# 31. Removing Remote References
+# Remove a remote repository
+echo "Removing a remote repository..."
+git remote remove <remote-name>
+
+# 32. Forking a Repository (on GitHub)
+# Fork a repository (done via GitHub UI, not Git CLI)
+
+# 33. Viewing Staged and Unstaged Changes
+# View changes that are staged vs unstaged
+echo "Viewing staged and unstaged changes..."
+git diff --staged
+git diff
+
+# 34. Working with Multiple Remotes
+# View all remotes in a repository
+echo "Viewing all remotes..."
+git remote show origin
+
+# 35. Show File History
+# View the history of a file (which commits modified it)
+echo "Viewing file history..."
+git log -- <filename>
+
+# 36. Amend Last Commit
+# Modify the last commit (e.g., add missed files)
+echo "Amending last commit..."
+git commit --amend
+
+# 37. Viewing Git Configurations
+# View all the configuration settings for Git
+echo "Viewing Git configurations..."
+git config --list
+
+# 38. Display Last Commit Information
+# Show detailed information about the last commit
+echo "Showing the last commit info..."
+git log -1
+
+# 39. Reverting to a Previous State
+# Discard changes in your working directory
+echo "Reverting working directory to last commit state..."
+git checkout -- <filename>
+
+# 40. Set Up a Git Hook
+# Example: Setting up a pre-commit hook
+echo "Setting up a pre-commit hook..."
+echo "#!/bin/sh" > .git/hooks/pre-commit
+echo "exit 0" >> .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+
+# 41. Viewing the Index (Staging Area)
+# View all files staged for commit
+echo "Viewing the staging area..."
+git ls-files --stage
+
+# 42. Clean Up Untracked Files
+# Remove untracked files from the working directory
+echo "Cleaning up untracked files..."
+git clean -f
+
+# 43. Managing Large Files (Git LFS)
+# Track large files using Git Large File Storage (LFS)
+echo "Tracking large files..."
+git lfs track "*.psd"
+
+# 44. Pushing Tags to Remote
+# Push a specific tag to the remote
+echo "Pushing a tag to the remote..."
+git push origin <tag-name>
+
+# 45. Creating a Bare Repository
+# Create a bare repository (used for remote server)
+echo "Creating a bare repository..."
+git init --bare <repository-name>.git
+
+# 46. Squash Commits
+# Squash multiple commits into a single commit during a rebase
+echo "Squashing commits..."
+git rebase -i HEAD~3
+
+# 47. Working with Detached HEAD
+# Checkout a commit directly (detached HEAD state)
+echo "Checking out a specific commit..."
+git checkout <commit-hash>
+
+# 48. Push to a Specific Branch
+# Push to a specific branch, regardless of the current branch
+echo "Pushing to a specific branch..."
+git push origin <local-branch>:<remote-branch>
+
+# 49. Fetching Changes Without Merging
+# Fetch changes from the remote repository but don't merge
+echo "Fetching changes..."
+git fetch origin
+
+# 50. Show Help for Git Command
+# Display help for a specific Git command
+echo "Getting help for a Git command..."
+git help <command>
+
+echo "Git commands executed successfully!"
