@@ -1,0 +1,280 @@
+# 1. Pod - Definition: A Pod is the basic deployable unit in Kubernetes and represents a running container.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+---
+
+# 2. ReplicationController - Definition: Ensures that a specified number of pod replicas are running at any given time.
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx-rc
+spec:
+  replicas: 3
+  selector:
+    app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+
+# 3. ReplicaSet - Definition: A ReplicaSet ensures that a specified number of replicas of a pod are running at any time.
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+
+# 4. Deployment - Definition: A Deployment provides declarative updates for Pods and ReplicaSets, enabling you to manage the deployment lifecycle.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+# 4.1 Deployment with Rolling Update Strategy - Definition: A rolling update strategy allows updates with zero downtime by incrementally replacing Pods.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-rolling
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+
+# 5. StatefulSet - Definition: StatefulSets are used for managing stateful applications, such as databases, that need persistent storage and stable network identities.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx-statefulset
+spec:
+  serviceName: "nginx"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+
+---
+
+# 6. Services - Definition: A Service is an abstraction layer to expose Pods to network traffic. There are different types of services.
+# 6.1 NodePort Service - Definition: NodePort exposes the service on each node’s IP at a static port.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-nodeport
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30001
+  type: NodePort
+
+# 6.2 ClusterIP Service - Definition: ClusterIP is the default service type, exposing the service only within the cluster.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-clusterip
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+# 6.3 LoadBalancer Service - Definition: LoadBalancer exposes the service to external traffic via a cloud provider’s load balancer.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-loadbalancer
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+---
+
+# 7. Ingress - Definition: Ingress manages HTTP(S) routing from outside the cluster to services within the cluster.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  rules:
+  - host: nginx.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-clusterip
+            port:
+              number: 80
+
+---
+
+# 8. ResourceQuota - Definition: ResourceQuota is used to limit the overall consumption of resources within a namespace.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: nginx-quota
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 4Gi
+    limits.cpu: "8"
+    limits.memory: 8Gi
+
+# 8.1 Resource Limit - Definition: Resource Limits control how much CPU and memory a container can consume, and what Kubernetes should allow as requests.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-with-limit
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+
+---
+
+# 9. Volumes - Definition: Volumes provide a way for containers to persist data. This volume will be available to all Pods.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod-with-volume
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - mountPath: /usr/share/nginx/html
+      name: nginx-volume
+  volumes:
+  - name: nginx-volume
+    emptyDir: {}
+
+---
+
+# 10. PersistentVolume (PV) and PersistentVolumeClaim (PVC) - Definition: Persistent Volumes and Persistent Volume Claims are used for managing storage that persists even after Pods are deleted.
+# 10.1 Persistent Volume - Definition: PV is a piece of storage in the cluster provisioned by an administrator.
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: "/mnt/data/nginx"
+
+# 10.2 Persistent Volume Claim - Definition: PVC is a request for storage by a user that is matched to a PV.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard
