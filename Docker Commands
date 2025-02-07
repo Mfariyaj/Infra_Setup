@@ -1,0 +1,162 @@
+Docker Basics
+docker version
+Displays the Docker client and server version.
+
+docker info
+Shows system-wide information about Docker.
+
+docker login
+Logs in to a Docker registry (e.g., Docker Hub).
+
+docker logout
+Logs out from a Docker registry.
+
+Image Management
+docker images
+Lists all locally available Docker images.
+
+docker pull <image-name>
+Downloads an image from a registry.
+
+docker push <image-name>
+Uploads an image to a registry.
+
+docker build -t <image-name> <path-to-Dockerfile>
+Builds an image from a Dockerfile.
+
+docker rmi <image-name>
+Deletes a local image.
+
+docker image prune
+Removes unused images.
+
+docker tag <source-image> <target-image>
+Tags an image with a new name.
+
+docker save <image-name> -o <file-name>.tar
+Saves an image to a tar file.
+
+docker load -i <file-name>.tar
+Loads an image from a tar file.
+
+Container Management
+docker ps
+Lists running containers.
+
+docker ps -a
+Lists all containers (running and stopped).
+
+docker run <image-name>
+Runs a container from an image.
+
+docker run -d <image-name>
+Runs a container in detached mode (background).
+
+docker run -it <image-name> /bin/sh
+Runs a container with an interactive shell.
+
+docker start <container-id>
+Starts a stopped container.
+
+docker stop <container-id>
+Stops a running container.
+
+docker restart <container-id>
+Restarts a container.
+
+docker rm <container-id>
+Deletes a stopped container.
+
+docker rm -f <container-id>
+Forcefully deletes a running container.
+
+docker logs <container-id>
+Displays logs from a container.
+
+docker logs -f <container-id>
+Streams logs in real-time.
+
+docker exec -it <container-id> /bin/sh
+Opens an interactive shell inside a running container.
+
+docker cp <container-id>:<file-path> <local-path>
+Copies files from a container to the local machine.
+
+docker cp <local-path> <container-id>:<file-path>
+Copies files from the local machine to a container.
+
+docker inspect <container-id>
+Displays detailed information about a container.
+
+docker stats
+Displays live resource usage statistics for containers.
+
+docker top <container-id>
+Displays running processes in a container.
+
+docker commit <container-id> <image-name>
+Creates a new image from a container's changes.
+
+Network Management
+docker network ls
+Lists all Docker networks.
+
+docker network create <network-name>
+Creates a new network.
+
+docker network inspect <network-name>
+Displays detailed information about a network.
+
+docker network connect <network-name> <container-id>
+Connects a container to a network.
+
+docker network disconnect <network-name> <container-id>
+Disconnects a container from a network.
+
+docker network rm <network-name>
+Deletes a network.
+
+Volume Management
+docker volume ls
+Lists all Docker volumes.
+
+docker volume create <volume-name>
+Creates a new volume.
+
+docker volume inspect <volume-name>
+Displays detailed information about a volume.
+
+docker volume rm <volume-name>
+Deletes a volume.
+
+docker volume prune
+Removes unused volumes.
+
+Docker Compose
+docker-compose up
+Starts containers defined in a docker-compose.yml file.
+
+docker-compose up -d
+Starts containers in detached mode.
+
+docker-compose down
+Stops and removes containers, networks, and volumes.
+
+docker-compose logs
+Displays logs from all services in the compose file.
+
+docker-compose ps
+Lists containers managed by Docker Compose.
+
+docker-compose build
+Builds images defined in the docker-compose.yml file.
+
+docker-compose exec <service-name> <command>
+Executes a command in a running service container.
+
+System Cleanup
+docker system prune
+Removes all unused containers, networks, images, and volumes.
+
+docker system df
+Displays disk usage by Docker objects.
