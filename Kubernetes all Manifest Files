@@ -1,7 +1,14 @@
 1. Pod
-A Pod is the smallest deployable unit in Kubernetes, representing one or more containers.
+A Pod is the smallest deployable unit in Kubernetes. It represents one or more containers that share storage, network, and specifications.
 
-Manifest with Liveness and Readiness Probes:
+Key Features:
+Containers: A Pod can run one or more containers.
+
+Shared Network: Containers in a Pod share the same IP address and port space.
+
+Shared Storage: Containers can share volumes.
+
+Example Manifest with Liveness and Readiness Probes:
 yaml
 Copy
 apiVersion: v1
@@ -29,10 +36,20 @@ spec:
         port: 80
       initialDelaySeconds: 5
       periodSeconds: 10
-2. ReplicationController
-Ensures a specified number of pod replicas are running.
+Explanation:
+Liveness Probe: Checks if the container is alive. If it fails, the container is restarted.
 
-Manifest:
+Readiness Probe: Checks if the container is ready to serve traffic. If it fails, the Pod is removed from service endpoints.
+
+2. ReplicationController
+Ensures a specified number of Pod replicas are running at all times.
+
+Key Features:
+Replicas: Maintains a desired number of Pods.
+
+Self-Healing: Replaces failed Pods automatically.
+
+Example Manifest:
 yaml
 Copy
 apiVersion: v1
@@ -55,9 +72,14 @@ spec:
         ports:
         - containerPort: 80
 3. ReplicaSet
-Ensures a specified number of pod replicas are running.
+A ReplicaSet ensures that a specified number of Pod replicas are running. It is the next-generation ReplicationController.
 
-Manifest:
+Key Features:
+Label Selectors: Uses matchLabels to select Pods.
+
+Scalability: Can scale up or down based on demand.
+
+Example Manifest:
 yaml
 Copy
 apiVersion: apps/v1
@@ -81,9 +103,14 @@ spec:
         ports:
         - containerPort: 80
 4. Deployment
-Manages the deployment lifecycle of Pods and ReplicaSets.
+A Deployment provides declarative updates for Pods and ReplicaSets. It is the most commonly used resource for managing stateless applications.
 
-Manifest with Rolling Update Strategy:
+Key Features:
+Rolling Updates: Updates Pods incrementally.
+
+Rollback: Reverts to a previous version if something goes wrong.
+
+Example Manifest with Rolling Update Strategy:
 yaml
 Copy
 apiVersion: apps/v1
@@ -112,9 +139,14 @@ spec:
         ports:
         - containerPort: 80
 5. StatefulSet
-Manages stateful applications with stable network identities and persistent storage.
+StatefulSets are used for stateful applications like databases that require stable network identities and persistent storage.
 
-Manifest:
+Key Features:
+Stable Network Identity: Each Pod gets a unique, stable hostname.
+
+Persistent Storage: Each Pod gets its own persistent volume.
+
+Example Manifest:
 yaml
 Copy
 apiVersion: apps/v1
@@ -139,9 +171,32 @@ spec:
         ports:
         - containerPort: 80
 6. Services
-Exposes Pods to network traffic.
+A Service is an abstraction layer that exposes Pods to network traffic.
 
-NodePort Service:
+Types of Services:
+ClusterIP: Exposes the service internally within the cluster.
+
+NodePort: Exposes the service on a static port on each node.
+
+LoadBalancer: Exposes the service externally using a cloud provider’s load balancer.
+
+Example Manifests:
+ClusterIP:
+yaml
+Copy
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-clusterip
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+NodePort:
 yaml
 Copy
 apiVersion: v1
@@ -157,22 +212,7 @@ spec:
       targetPort: 80
       nodePort: 30001
   type: NodePort
-ClusterIP Service:
-yaml
-Copy
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx-clusterip
-spec:
-  selector:
-    app: nginx
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
-LoadBalancer Service:
+LoadBalancer:
 yaml
 Copy
 apiVersion: v1
@@ -188,7 +228,7 @@ spec:
       targetPort: 80
   type: LoadBalancer
 7. Ingress
-Manages HTTP(S) routing to services.
+Ingress manages HTTP(S) routing to services within the cluster.
 
 Real-Time Example:
 yaml
@@ -212,9 +252,9 @@ spec:
             port:
               number: 80
 8. ResourceQuota
-Limits resource consumption within a namespace.
+ResourceQuota limits the overall resource consumption within a namespace.
 
-Manifest:
+Example Manifest:
 yaml
 Copy
 apiVersion: v1
@@ -228,9 +268,9 @@ spec:
     limits.cpu: "8"
     limits.memory: 8Gi
 9. Volumes
-Provides persistent storage for containers.
+Volumes provide persistent storage for containers.
 
-Manifest:
+Example Manifest:
 yaml
 Copy
 apiVersion: v1
@@ -250,8 +290,9 @@ spec:
   - name: nginx-volume
     emptyDir: {}
 10. PersistentVolume (PV) and PersistentVolumeClaim (PVC)
-Manages persistent storage.
+PVs and PVCs manage persistent storage.
 
+Example Manifests:
 PersistentVolume:
 yaml
 Copy
@@ -338,21 +379,21 @@ strategy:
 Kubernetes Architecture
 Master Node:
 
-API Server
+API Server: Exposes the Kubernetes API.
 
-Scheduler
+Scheduler: Assigns Pods to nodes.
 
-Controller Manager
+Controller Manager: Manages controllers like ReplicaSets and Deployments.
 
-etcd (Key-Value Store)
+etcd: Key-value store for cluster data.
 
 Worker Node:
 
-Kubelet
+Kubelet: Manages Pods on the node.
 
-Kube Proxy
+Kube Proxy: Manages network rules.
 
-Container Runtime (e.g., Docker)
+Container Runtime: Runs containers (e.g., Docker).
 
 Real-Time Example: Ingress with TLS
 yaml
