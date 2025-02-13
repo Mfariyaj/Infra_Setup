@@ -1,18 +1,40 @@
-# 1. Pod - Definition: A Pod is the basic deployable unit in Kubernetes and represents a running container.
+1. Pod
+A Pod is the smallest deployable unit in Kubernetes, representing one or more containers.
+
+Manifest with Liveness and Readiness Probes:
+yaml
+Copy
 apiVersion: v1
 kind: Pod
 metadata:
   name: nginx-pod
+  labels:
+    app: nginx
+    env: prod
 spec:
   containers:
   - name: nginx
     image: nginx:latest
     ports:
     - containerPort: 80
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 10
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 10
+2. ReplicationController
+Ensures a specified number of pod replicas are running.
 
----
-
-# 2. ReplicationController - Definition: Ensures that a specified number of pod replicas are running at any given time.
+Manifest:
+yaml
+Copy
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -25,16 +47,19 @@ spec:
     metadata:
       labels:
         app: nginx
+        env: prod
     spec:
       containers:
       - name: nginx
         image: nginx:latest
         ports:
         - containerPort: 80
+3. ReplicaSet
+Ensures a specified number of pod replicas are running.
 
----
-
-# 3. ReplicaSet - Definition: A ReplicaSet ensures that a specified number of replicas of a pod are running at any time.
+Manifest:
+yaml
+Copy
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
@@ -48,41 +73,23 @@ spec:
     metadata:
       labels:
         app: nginx
+        env: prod
     spec:
       containers:
       - name: nginx
         image: nginx:latest
         ports:
         - containerPort: 80
+4. Deployment
+Manages the deployment lifecycle of Pods and ReplicaSets.
 
----
-
-# 4. Deployment - Definition: A Deployment provides declarative updates for Pods and ReplicaSets, enabling you to manage the deployment lifecycle.
+Manifest with Rolling Update Strategy:
+yaml
+Copy
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:latest
-        ports:
-        - containerPort: 80
-
-# 4.1 Deployment with Rolling Update Strategy - Definition: A rolling update strategy allows updates with zero downtime by incrementally replacing Pods.
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment-rolling
 spec:
   replicas: 3
   strategy:
@@ -97,16 +104,19 @@ spec:
     metadata:
       labels:
         app: nginx
+        env: prod
     spec:
       containers:
       - name: nginx
         image: nginx:latest
         ports:
         - containerPort: 80
+5. StatefulSet
+Manages stateful applications with stable network identities and persistent storage.
 
----
-
-# 5. StatefulSet - Definition: StatefulSets are used for managing stateful applications, such as databases, that need persistent storage and stable network identities.
+Manifest:
+yaml
+Copy
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -121,17 +131,19 @@ spec:
     metadata:
       labels:
         app: nginx
+        env: prod
     spec:
       containers:
       - name: nginx
         image: nginx:latest
         ports:
         - containerPort: 80
+6. Services
+Exposes Pods to network traffic.
 
----
-
-# 6. Services - Definition: A Service is an abstraction layer to expose Pods to network traffic. There are different types of services.
-# 6.1 NodePort Service - Definition: NodePort exposes the service on each node’s IP at a static port.
+NodePort Service:
+yaml
+Copy
 apiVersion: v1
 kind: Service
 metadata:
@@ -145,8 +157,9 @@ spec:
       targetPort: 80
       nodePort: 30001
   type: NodePort
-
-# 6.2 ClusterIP Service - Definition: ClusterIP is the default service type, exposing the service only within the cluster.
+ClusterIP Service:
+yaml
+Copy
 apiVersion: v1
 kind: Service
 metadata:
@@ -159,8 +172,9 @@ spec:
       port: 80
       targetPort: 80
   type: ClusterIP
-
-# 6.3 LoadBalancer Service - Definition: LoadBalancer exposes the service to external traffic via a cloud provider’s load balancer.
+LoadBalancer Service:
+yaml
+Copy
 apiVersion: v1
 kind: Service
 metadata:
@@ -173,17 +187,21 @@ spec:
       port: 80
       targetPort: 80
   type: LoadBalancer
+7. Ingress
+Manages HTTP(S) routing to services.
 
----
-
-# 7. Ingress - Definition: Ingress manages HTTP(S) routing from outside the cluster to services within the cluster.
+Real-Time Example:
+yaml
+Copy
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: nginx.local
+  - host: nginx.example.com
     http:
       paths:
       - path: /
@@ -193,10 +211,12 @@ spec:
             name: nginx-clusterip
             port:
               number: 80
+8. ResourceQuota
+Limits resource consumption within a namespace.
 
----
-
-# 8. ResourceQuota - Definition: ResourceQuota is used to limit the overall consumption of resources within a namespace.
+Manifest:
+yaml
+Copy
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -207,29 +227,12 @@ spec:
     requests.memory: 4Gi
     limits.cpu: "8"
     limits.memory: 8Gi
+9. Volumes
+Provides persistent storage for containers.
 
-# 8.1 Resource Limit - Definition: Resource Limits control how much CPU and memory a container can consume, and what Kubernetes should allow as requests.
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx-pod-with-limit
-spec:
-  containers:
-  - name: nginx
-    image: nginx:latest
-    ports:
-    - containerPort: 80
-    resources:
-      requests:
-        memory: "64Mi"
-        cpu: "250m"
-      limits:
-        memory: "128Mi"
-        cpu: "500m"
-
----
-
-# 9. Volumes - Definition: Volumes provide a way for containers to persist data. This volume will be available to all Pods.
+Manifest:
+yaml
+Copy
 apiVersion: v1
 kind: Pod
 metadata:
@@ -246,11 +249,12 @@ spec:
   volumes:
   - name: nginx-volume
     emptyDir: {}
+10. PersistentVolume (PV) and PersistentVolumeClaim (PVC)
+Manages persistent storage.
 
----
-
-# 10. PersistentVolume (PV) and PersistentVolumeClaim (PVC) - Definition: Persistent Volumes and Persistent Volume Claims are used for managing storage that persists even after Pods are deleted.
-# 10.1 Persistent Volume - Definition: PV is a piece of storage in the cluster provisioned by an administrator.
+PersistentVolume:
+yaml
+Copy
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -265,8 +269,9 @@ spec:
   storageClassName: standard
   hostPath:
     path: "/mnt/data/nginx"
-
-# 10.2 Persistent Volume Claim - Definition: PVC is a request for storage by a user that is matched to a PV.
+PersistentVolumeClaim:
+yaml
+Copy
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -278,3 +283,100 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: standard
+Additional Features
+1. Node Selector
+Assigns Pods to specific nodes based on labels.
+
+yaml
+Copy
+spec:
+  nodeSelector:
+    disktype: ssd
+2. Node Affinity
+Advanced node selection using affinity rules.
+
+yaml
+Copy
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: disktype
+            operator: In
+            values:
+            - ssd
+3. Taints and Tolerations
+Prevents Pods from being scheduled on specific nodes unless they tolerate the taint.
+
+Taint a Node:
+bash
+Copy
+kubectl taint nodes node1 key=value:NoSchedule
+Add Toleration to Pod:
+yaml
+Copy
+spec:
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "value"
+    effect: "NoSchedule"
+4. Deployment Strategies
+Recreate: Terminates old Pods before creating new ones.
+
+RollingUpdate: Gradually replaces old Pods with new ones.
+
+yaml
+Copy
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
+    maxSurge: 1
+Kubernetes Architecture
+Master Node:
+
+API Server
+
+Scheduler
+
+Controller Manager
+
+etcd (Key-Value Store)
+
+Worker Node:
+
+Kubelet
+
+Kube Proxy
+
+Container Runtime (e.g., Docker)
+
+Real-Time Example: Ingress with TLS
+yaml
+Copy
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress-tls
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - nginx.example.com
+    secretName: nginx-tls-secret
+  rules:
+  - host: nginx.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-clusterip
+            port:
+              number: 80
+This comprehensive guide covers all the requested Kubernetes features with real-time examples and detailed manifests. Let me know if you need further clarification!
