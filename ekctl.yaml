@@ -1,0 +1,53 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+ 
+metadata:
+  name: EKS
+  region: us-east-1
+  version: "1.31"
+ 
+iam:
+  withOIDC: true
+ 
+  # Adding the Service Account for EBS CSI Driver
+  serviceAccounts:
+    - metadata:
+        name: ebs-csi-controller-sa
+        namespace: kube-system
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+      roleOnly: true
+      roleName: EBS-CSI-Driver-Role
+ 
+addons:
+- name: aws-ebs-csi-driver
+  version: latest
+  serviceAccountRoleARN: arn:aws:iam::905418030005:role/EBS-CSI-Driver-Role
+ 
+- name: vpc-cni
+  version: latest
+ 
+- name: kube-proxy
+  version: latest
+ 
+- name: coredns
+  version: latest
+ 
+vpc:
+  id: "vpc-0e23dd3576abbe9d7"
+  subnets:
+    private:
+      us-east-1f:
+        id: "subnet-0d5ef152f97df8c89"
+      us-east-1d:
+        id: "subnet-024e41be7f96b4b12"
+ 
+managedNodeGroups:
+  - name: ng-1
+    privateNetworking: true
+    instanceType: t3.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
+    ssh: # enable SSH using SSM
+      enableSsm: true
