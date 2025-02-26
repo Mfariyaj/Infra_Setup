@@ -4,7 +4,7 @@ env:
   variables:
     GITHUB_REPO: "https://github.com/Mfariyaj/Infra_Setup.git"
     TERRAFORM_ROOT: "Module"  # Root folder for Terraform
-    CASE: "apply"  # Options: plan, apply, destroy
+    CASE: "plan"  # Options: plan, apply, destroy
 
 phases:
   install:
