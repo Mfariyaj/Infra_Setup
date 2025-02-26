@@ -1,0 +1,56 @@
+version: 0.2
+
+env:
+  variables:
+    GITHUB_REPO: "https://github.com/Mfariyaj/Infra_Setup.git"
+    TERRAFORM_ROOT: "Module"  # Root folder for Terraform
+    CASE: "apply"  # Options: plan, apply, destroy
+
+phases:
+  install:
+    runtime-versions:
+      python: latest
+    commands:
+      - echo "Installing Terraform..."
+      - curl -O https://releases.hashicorp.com/terraform/1.5.6/terraform_1.5.6_linux_amd64.zip
+      - unzip terraform_1.5.6_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+      - terraform --version
+
+  pre_build:
+    commands:
+      - echo "Checking AWS credentials..."
+      - aws sts get-caller-identity
+      - echo "Cloning GitHub repository..."
+      - git clone "$GITHUB_REPO" repo
+      - cd repo
+      - ls -l
+      - cd "$TERRAFORM_ROOT" || exit 1
+      - ls -l
+      - echo "Initializing Terraform..."
+      - terraform init -input=false || exit 1
+
+  build:
+    commands:
+      - echo "Executing Terraform based on CASE=$CASE..."
+      - |
+        case "$CASE" in
+          "plan")
+            echo "Planning Terraform deployment..."
+            terraform plan -out=tfplan -input=false || exit 1
+            ;;
+          "apply")
+            echo "Applying Terraform changes..."
+            terraform apply -auto-approve tfplan || exit 1
+            echo "Terraform deployment completed."
+            ;;
+          "destroy")
+            echo "Destroying Terraform resources..."
+            terraform destroy -auto-approve || exit 1
+            echo "Terraform resources destroyed."
+            ;;
+          *)
+            echo "Invalid CASE value. Use plan, apply, or destroy."
+            exit 1
+            ;;
+        esac
