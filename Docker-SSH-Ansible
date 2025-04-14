@@ -1,0 +1,167 @@
+🧪 Ansible Practice Setup Using Docker Containers (Ubuntu)
+📌 Prerequisites
+Docker installed on your Ansible server
+
+Ansible installed on your Ansible server
+
+SSH key pair generated (ssh-keygen)
+
+🧱 Step 1: Pull Ubuntu Image
+bash
+Copy code
+docker pull ubuntu
+🚀 Step 2: Run Ubuntu Containers with SSH Port Mapping
+bash
+Copy code
+docker run -dit --name ubuntu1 -h ubuntu1 -p 2222:22 ubuntu
+docker run -dit --name ubuntu2 -h ubuntu2 -p 2223:22 ubuntu
+🔧 Step 3: Install SSH and Create User in Both Containers
+For ubuntu1:
+bash
+Copy code
+docker exec -it ubuntu1 bash
+apt update
+apt install -y openssh-server sudo
+mkdir /var/run/sshd
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+service ssh start
+
+useradd -m ansible
+echo 'ansible:ansible' | chpasswd
+usermod -aG sudo ansible
+exit
+For ubuntu2:
+bash
+Copy code
+docker exec -it ubuntu2 bash
+apt update
+apt install -y openssh-server sudo
+mkdir /var/run/sshd
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+service ssh start
+
+useradd -m ansible
+echo 'ansible:ansible' | chpasswd
+usermod -aG sudo ansible
+exit
+🔑 Step 4: Copy SSH Key to Both Containers
+On your Ansible server:
+
+bash
+Copy code
+ssh-copy-id -p 2222 ansible@localhost
+ssh-copy-id -p 2223 ansible@localhost
+Enter password ansible when prompted.
+
+📂 Step 5: Create Ansible Inventory File
+Create a file named inventory.ini:
+
+ini
+Copy code
+[Dev]
+ubuntu1 ansible_host=localhost ansible_port=2222 ansible_user=ansible
+
+[Prod]
+ubuntu2 ansible_host=localhost ansible_port=2223 ansible_user=ansible
+✅ Step 6: Test Ansible Connection
+bash
+Copy code
+ansible -i inventory.ini Dev -m ping
+ansible -i inventory.ini Prod -m ping
+Let me know if you'd like this saved as a .md file or need a sample playbook too!
+
+
+
+
+
+
+You said:
+in text formate
+
+
+ChatGPT said:
+Here you go — the full setup steps in plain text format for your documentation:
+
+Ansible Practice Setup Using Docker Containers (Ubuntu)
+
+Prerequisites:
+
+Docker must be installed on the Ansible server
+
+Ansible must be installed on the Ansible server
+
+SSH key pair should be generated using ssh-keygen
+
+Step 1: Pull Ubuntu Image
+
+nginx
+Copy code
+docker pull ubuntu
+Step 2: Run Ubuntu Containers with SSH Port Mapping
+
+arduino
+Copy code
+docker run -dit --name ubuntu1 -h ubuntu1 -p 2222:22 ubuntu
+docker run -dit --name ubuntu2 -h ubuntu2 -p 2223:22 ubuntu
+Step 3: Install SSH and Create User in Both Containers
+
+For ubuntu1:
+
+bash
+Copy code
+docker exec -it ubuntu1 bash
+apt update
+apt install -y openssh-server sudo
+mkdir /var/run/sshd
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+service ssh start
+
+useradd -m ansible
+echo 'ansible:ansible' | chpasswd
+usermod -aG sudo ansible
+exit
+For ubuntu2:
+
+bash
+Copy code
+docker exec -it ubuntu2 bash
+apt update
+apt install -y openssh-server sudo
+mkdir /var/run/sshd
+echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config
+service ssh start
+
+useradd -m ansible
+echo 'ansible:ansible' | chpasswd
+usermod -aG sudo ansible
+exit
+Step 4: Copy SSH Key to Both Containers
+
+On your Ansible server:
+
+sql
+Copy code
+ssh-copy-id -p 2222 ansible@localhost
+ssh-copy-id -p 2223 ansible@localhost
+Use ansible as the password when prompted.
+
+Step 5: Create Ansible Inventory File
+
+Create a file named inventory.ini with the following content:
+
+csharp
+Copy code
+[Dev]
+ubuntu1 ansible_host=localhost ansible_port=2222 ansible_user=ansible
+
+[Prod]
+ubuntu2 ansible_host=localhost ansible_port=2223 ansible_user=ansible
+Step 6: Test Ansible Connection
+
+Run the ping command for each group:
+
+css
+Copy code
+ansible -i inventory.ini Dev -m ping
+ansible -i inventory.ini Prod -m ping
+Let me know if you want this as a .txt or .md file or need sample playbooks for practice.
