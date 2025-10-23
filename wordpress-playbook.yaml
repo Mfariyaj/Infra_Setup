@@ -1,0 +1,133 @@
+---
+- name: Install and configure WordPress on Ubuntu
+  hosts: web
+  become: yes
+
+  vars:
+    # Adjust as needed
+    wp_db_name: wordpress
+    wp_db_user: wp_user
+    wp_db_password: "test1234"
+    wp_install_dir: /var/www/html/wordpress
+    wp_download_url: https://wordpress.org/latest.tar.gz
+
+    wp_packages:
+      - ghostscript
+      - libapache2-mod-php
+      - php
+      - php-bcmath
+      - php-curl
+      - php-imagick
+      - php-intl
+      - php-json
+      - php-mbstring
+      - php-mysql
+      - php-xml
+      - php-zip
+      - unzip
+      - tar
+      - curl
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install PHP and required dependencies
+      apt:
+        name: "{{ wp_packages }}"
+        state: present
+
+    - name: Install MySQL Python dependencies
+      apt:
+        name: python3-pymysql
+        state: present
+   
+    - name: Ensure Apache and MySQL are running
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - apache2
+        - mysql
+    
+    - name: Create WordPress database
+      mysql_db:
+        name: "{{ wp_db_name }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock  
+
+    - name: Create WordPress database user
+      mysql_user:
+        name: "{{ wp_db_user }}"
+        password: "{{ wp_db_password }}"
+        priv: "{{ wp_db_name }}.*:ALL"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Download WordPress archive
+      get_url:
+        url: "{{ wp_download_url }}"
+        dest: /tmp/wordpress.tar.gz
+
+    - name: Extract WordPress
+      unarchive:
+        src: /tmp/wordpress.tar.gz
+        dest: /var/www/html/
+        remote_src: yes
+        creates: "{{ wp_install_dir }}"
+
+    - name: Copy WordPress sample config
+      copy:
+        src: "{{ wp_install_dir }}/wp-config-sample.php"
+        dest: "{{ wp_install_dir }}/wp-config.php"
+        remote_src: yes
+
+    - name: Configure wp-config.php
+      lineinfile:
+        path: "{{ wp_install_dir }}/wp-config.php"
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      loop:
+        - { regexp: "define\\( 'DB_NAME', '.*' \\);", line: "define( 'DB_NAME', '{{ wp_db_name }}' );" }
+        - { regexp: "define\\( 'DB_USER', '.*' \\);", line: "define( 'DB_USER', '{{ wp_db_user }}' );" }
+        - { regexp: "define\\( 'DB_PASSWORD', '.*' \\);", line: "define( 'DB_PASSWORD', '{{ wp_db_password }}' );" }
+
+    - name: Set ownership and permissions
+      file:
+        path: "{{ wp_install_dir }}"
+        owner: www-data
+        group: www-data
+        recurse: yes
+        state: directory
+
+    - name: Enable Apache rewrite module
+      command: a2enmod rewrite
+      notify: Restart Apache
+
+    - name: Configure Apache virtual host for WordPress
+      copy:
+        dest: /etc/apache2/sites-available/wordpress.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin webmaster@localhost
+              DocumentRoot {{ wp_install_dir }}
+              <Directory {{ wp_install_dir }}>
+                  AllowOverride All
+              </Directory>
+          </VirtualHost>
+      notify:
+        - Enable WordPress site
+
+  handlers:
+    - name: Enable WordPress site
+      command: a2ensite wordpress.conf
+      notify: Restart Apache
+
+    - name: Restart Apache
+      service:
+        name: apache2
+        state: restarted
+
