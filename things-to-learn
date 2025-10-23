@@ -1,0 +1,281 @@
+1. Linux Fundamentals (Strong Base)
+
+Even with cloud or Ansible, Linux is core.
+
+✅ Topics:
+
+File system hierarchy (/etc, /var, /usr, /tmp)
+
+Basic commands: ls, grep, find, awk, sed, tar, rsync, scp
+
+Permissions (chmod, chown, umask)
+
+Process management (ps, top, kill, nice, systemctl)
+
+Cron jobs and system logs (/var/log/messages, /var/log/syslog)
+
+SSH key setup and passwordless authentication
+
+💡 Hands-on:
+
+Create users, groups, and schedule a cron job.
+
+Monitor logs and resource usage.
+
+☁️ 2. Cloud Platform (AWS / Azure / GCP)
+
+You should have hands-on in at least one (AWS is most common).
+
+✅ Core AWS topics:
+
+EC2 (launch, connect, AMI, snapshot)
+
+S3 (upload, sync, versioning, lifecycle)
+
+IAM (users, roles, policies, MFA)
+
+VPC (subnet, route table, NAT, security groups)
+
+RDS basics
+
+CloudWatch (metrics, alarms)
+
+Load Balancer (ALB/NLB)
+
+Auto Scaling basics
+
+Backup and AMI automation (like you did 😉)
+
+💡 Hands-on:
+
+Launch EC2 + connect via SSH.
+
+Host a website on S3 or EC2.
+
+Create IAM role and attach to EC2.
+
+⚙️ 3. Ansible (Automation / Configuration Management)
+
+At 3 years, you should be comfortable writing playbooks.
+
+✅ Topics:
+
+Inventory files (static/dynamic)
+
+ansible.cfg file and settings
+
+Playbooks and tasks
+
+Variables, handlers, and loops
+
+Templates (Jinja2)
+
+Roles and directory structure
+
+Tags and conditionals
+
+Ad-hoc commands
+
+Vault (for secrets)
+
+Ansible Galaxy basics
+
+💡 Hands-on:
+
+Write playbook to install Apache/MySQL.
+
+Create role to deploy a web app.
+
+Use Ansible Vault for database passwords.
+
+🐳 4. Docker (Containerization)
+
+✅ Topics:
+
+Docker architecture (image, container, volume, network)
+
+Dockerfile and build process
+
+Docker Hub and private registry
+
+Docker Compose basics
+
+Common commands (docker ps, docker logs, docker exec)
+
+Image security (Trivy scanning, best practices)
+
+Bind mounts vs Volumes
+
+💡 Hands-on:
+
+Build an image from Dockerfile.
+
+Run a WordPress + MySQL app with Compose.
+
+Scan an image with Trivy.
+
+☸️ 5. Kubernetes (Container Orchestration)
+
+At 3 years, basic + intermediate knowledge is expected.
+
+✅ Topics:
+
+Architecture (Master, Node, etcd, kubelet)
+
+Pods, ReplicaSets, Deployments
+
+Services (ClusterIP, NodePort, LoadBalancer)
+
+ConfigMap, Secret
+
+Namespace
+
+Ingress (basic)
+
+kubectl commands
+
+YAML manifest structure
+
+💡 Hands-on:
+
+Deploy Nginx pod and expose via service.
+
+Create ConfigMap + mount it to pod.
+
+Perform rolling update of deployment.
+
+🔁 6. CI/CD (Automation Pipelines)
+
+You should know Jenkins or GitHub Actions (at least one).
+
+✅ Topics:
+
+Jenkins installation and setup
+
+Pipelines (Freestyle + Declarative)
+
+Triggers (webhook, cron)
+
+Integration with GitHub and Docker
+
+Jenkinsfile
+
+Jenkins agents/slaves
+
+Artifact storage
+
+💡 Hands-on:
+
+Create a Jenkins pipeline to build Docker image and push to Docker Hub.
+
+Deploy it using Ansible or Kubernetes.
+
+📜 7. Infrastructure as Code (IaC) – Terraform
+
+✅ Topics:
+
+Providers, resources, variables, outputs
+
+State file
+
+Modules
+
+Workspaces
+
+Terraform Cloud basics
+
+💡 Hands-on:
+
+Write code to create EC2 and S3.
+
+Use variables and output file.
+
+Destroy and reapply infra safely.
+
+🔒 8. Networking & Security Basics
+
+✅ Topics:
+
+TCP/IP, DNS, DHCP
+
+SSH, HTTP/HTTPS, firewalls
+
+Security Groups, NACLs (AWS)
+
+Load balancer concepts
+
+VPN basics
+
+SSL/TLS certificates
+
+💡 Hands-on:
+
+Create VPC and test connectivity using ping or curl.
+
+Apply firewall rules and test.
+
+📊 9. Monitoring & Logging
+
+✅ Topics:
+
+CloudWatch (AWS)
+
+Prometheus + Grafana basics
+
+ELK Stack (Elasticsearch, Logstash, Kibana)
+
+Alerting setup
+
+Log rotation
+
+💡 Hands-on:
+
+Setup simple CPU/memory monitoring in CloudWatch or Grafana.
+
+💻 10. Git & Version Control
+
+✅ Topics:
+
+git clone, add, commit, push, pull
+
+Branching and merging
+
+GitHub Actions basics
+
+Git hooks
+
+Resolving merge conflicts
+
+💡 Hands-on:
+
+Create repo, push code, and trigger Jenkins pipeline.
+
+🧰 11. Scripting (Bash / Python)
+
+✅ Topics:
+
+Bash loops, if-else, functions
+
+Reading files and arguments
+
+Simple Python scripting for automation (optional)
+
+Using cron jobs to run scripts
+
+💡 Hands-on:
+
+Write Bash script to backup files.
+
+Automate system updates.
+
+☁️ 12. Bonus (Optional but Valuable)
+
+Trivy / Clair → Container image scanning
+
+Vault / Secrets Manager → Secrets handling
+
+Helm → Kubernetes package manager
+
+CloudFormation / ARM templates → if using AWS/Azure
+
+DevSecOps basics → security integration in pipelines
